@@ -14,11 +14,14 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.18",
     "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.19.0"
+    "react-router-dom": "^6.19.0",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
+    "@types/node": "^20.9.2",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",

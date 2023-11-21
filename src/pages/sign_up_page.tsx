@@ -1,36 +1,13 @@
 // SignIn.tsx
 
 import React, {useState} from 'react'
-import styled from '@emotion/styled'
-import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  Paper,
-  Box,
-} from '@mui/material'
 
-import axios from 'axios'
-import {Link} from 'react-router-dom'
+import {TextField, Button, Container, Typography, Box} from '@mui/material'
+import {StyledPaper, StyledForm} from '../styles/sign_up_style'
 
-// Styled components
+import {signUpApi} from '../services/sign_up_api'
 
-const StyledPaper = styled(Paper)`
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-`
-
-const StyledForm = styled.form`
-  width: 80%;
-  margin-top: 1rem;
-`
-
-// SignIn component
-const SignIn: React.FC = () => {
+const SignUpPage: React.FC = () => {
   const [userId, setUserId] = useState('')
   const [userPassword, setUserPassword] = useState('')
 
@@ -54,14 +31,12 @@ const SignIn: React.FC = () => {
     setUserId('')
     setUserPassword('')
 
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/signUp',
-        sendData
-      )
-      console.log('SignUp successful:', response.data)
-    } catch (error) {
-      console.log(error)
+    const signUpSuccess = await signUpApi(sendData)
+
+    if (signUpSuccess) {
+      console.log('회원가입 성공!!!')
+    } else {
+      console.log('회원가입 실패!!!')
     }
   }
 
@@ -117,4 +92,4 @@ const SignIn: React.FC = () => {
   )
 }
 
-export default SignIn
+export default SignUpPage

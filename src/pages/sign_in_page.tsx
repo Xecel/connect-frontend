@@ -1,36 +1,14 @@
 // SignIn.tsx
 
 import React, {useState} from 'react'
-import styled from '@emotion/styled'
-import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  Paper,
-  Box,
-} from '@mui/material'
-
-import axios from 'axios'
 import {Link} from 'react-router-dom'
 
-// Styled components
+import {TextField, Button, Container, Typography, Box} from '@mui/material'
+import {StyledPaper, StyledForm} from '../styles/sign_in_style'
 
-const StyledPaper = styled(Paper)`
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-`
+import {signInApi} from '../services/sign_in_api'
 
-const StyledForm = styled.form`
-  width: 80%;
-  margin-top: 1rem;
-`
-
-// SignIn component
-const SignIn: React.FC = () => {
+const SignInPage: React.FC = () => {
   const [userId, setUserId] = useState('')
   const [userPassword, setuserPassword] = useState('')
 
@@ -55,19 +33,12 @@ const SignIn: React.FC = () => {
     setUserId('')
     setuserPassword('')
 
-    try {
-      const response = await axios.post(
-        'http://localhost:8080/signIn',
-        sendData
-      )
+    const signInSuccess = await signInApi(sendData)
 
-      if (response.data) {
-        console.log('로그인 성공!!!')
-      } else {
-        console.log('로그인 실패!!!')
-      }
-    } catch (error) {
-      console.log(error)
+    if (signInSuccess) {
+      console.log('로그인 성공!!!')
+    } else {
+      console.log('로그인 실패!!!')
     }
   }
 
@@ -126,4 +97,4 @@ const SignIn: React.FC = () => {
   )
 }
 
-export default SignIn
+export default SignInPage
