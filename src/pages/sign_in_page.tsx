@@ -1,50 +1,59 @@
-// SignIn.tsx
-
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {useNavigate, Link} from 'react-router-dom'
 
 import {TextField, Button, Container, Typography, Box} from '@mui/material'
 import {StyledPaper, StyledForm} from '../styles/sign_in_style'
 
-import {signInApi} from '../services/sign_in_api'
+import signInApi from '../services/sign_in_api'
+
+import {useSetRecoilState} from 'recoil'
+import {isLoggedInState} from '../atom/isLoggedInAtom'
 
 const SignInPage: React.FC = () => {
   const [userId, setUserId] = useState('')
-  const [userPassword, setuserPassword] = useState('')
+  const [userPassword, setUserPassword] = useState('')
+  const setIsLogged = useSetRecoilState(isLoggedInState)
+
+  const navi = useNavigate()
 
   const handleUserIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value)
   }
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setuserPassword(e.target.value)
+    setUserPassword(e.target.value)
   }
 
-  // API 사용 부분
   const handleSignInClick = async () => {
-    // Simulate SignIn logic
     console.log(`ID: ${userId}, Password: ${userPassword}`)
 
     const sendData = {
-      userId: userId,
-      userPassword: userPassword,
+      userId,
+      userPassword,
     }
 
     setUserId('')
-    setuserPassword('')
+    setUserPassword('')
 
-    const signInSuccess = await signInApi(sendData)
+    try {
+      const signInSuccess = await signInApi(sendData)
 
-    if (signInSuccess) {
-      console.log('로그인 성공!!!')
-    } else {
-      console.log('로그인 실패!!!')
+      if (signInSuccess) {
+        console.log('로그인 성공!!!')
+        setIsLogged(true)
+        navi('/main')
+      } else {
+        console.log('로그인 실패!!!')
+        setIsLogged(false)
+      }
+    } catch (error) {
+      console.error('로그인 중 오류 발생:', error)
+      setIsLogged(false) // Update the state to false in case of an error
     }
   }
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault() // Prevents the default form submission behavior
-    handleSignInClick()
+    e.preventDefault()
   }
 
   return (
@@ -77,7 +86,13 @@ const SignInPage: React.FC = () => {
             onChange={handlePasswordChange}
           />
           <Box sx={{mt: 2}}>
-            <Button type='submit' fullWidth variant='contained' color='primary'>
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              color='primary'
+              onClick={handleSignInClick}
+            >
               로그인
             </Button>
             <Button

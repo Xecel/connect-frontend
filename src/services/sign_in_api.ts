@@ -7,8 +7,8 @@ interface SignInData {
   userPassword: string
 }
 
-export const signInApi = async (sendData: SignInData) => {
-  if (SIGN_IN_API !== undefined) {
+const signInApi = async (sendData: SignInData) => {
+  if (SIGN_IN_API) {
     try {
       const response = await axios.post(SIGN_IN_API, sendData)
       return response.data
@@ -20,3 +20,5 @@ export const signInApi = async (sendData: SignInData) => {
     console.log('SIGN_IN_API is undefined')
   }
 }
+
+export default signInApi
